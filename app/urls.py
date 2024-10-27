@@ -1,9 +1,11 @@
-from django.urls import path, include
-from .views import FoodTypeListCreateView, FoodListCreateView, CommentListCreateView, FoodRetrieveUpdateDestroyView
+# from django.urls import path, include
+from rest_framework import routers
 
-urlpatterns = [
-    path('food-types/', FoodTypeListCreateView.as_view(), name='foodtype-list-create'),
-    path('foods/', FoodListCreateView.as_view(), name='food-list-create'),
-    path('foods/<int:pk>/', FoodRetrieveUpdateDestroyView.as_view(), name='food-detail'),
-    path('comments/', CommentListCreateView.as_view(), name='comment-list-create'),
-]
+from .views import (FoodTypeApiViewSet, FoodApiViewSet, CommentApiViewSet)
+
+router = routers.SimpleRouter()
+router.register('food-type', FoodTypeApiViewSet)
+router.register('food', FoodApiViewSet)
+router.register('comment', CommentApiViewSet)
+
+urlpatterns = router.urls
