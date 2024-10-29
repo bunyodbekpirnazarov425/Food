@@ -9,18 +9,44 @@ from .permissions import IsAuthorOrReadOnly
 from .serializers import FoodTypeSerializer, FoodSerializer, CommentSerializer
 from rest_framework.filters import SearchFilter, OrderingFilter
 
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
+from .throttles import (FoodTypeAnonRateThrottle, FoodTypeUserRateThrottle,
+                        FoodAnonRateThrottle,
+                        FoodUserRateThrottle,
+                        CommentAnonRateThrottle,
+                        CommentUserRateThrottle)
+
+
+def get_queryset(self):
+    if self.request.version == 'v1':
+        return Food.objects.all()
+    else:
+        return Food.objects.all()
+
+def get_serializers_class(self):
+    if self.request.version == 'v1':
+        return FoodSerializer
+    else:
+        return FoodSerializer
+
 
 class FoodTypeApiViewSet(ModelViewSet):
     queryset = FoodType.objects.all()
     serializer_class = FoodTypeSerializer
+    throttle_classes = [FoodTypeAnonRateThrottle, FoodTypeUserRateThrottle, ScopedRateThrottle]
+    throttle_scope = 'food_anon_detail'
 
 class FoodApiViewSet(ModelViewSet):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
+    throttle_classes = [FoodAnonRateThrottle, FoodUserRateThrottle, ScopedRateThrottle]
+    throttle_scope = 'food_anon_detail'
 
 class CommentApiViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    throttle_classes = [CommentAnonRateThrottle, CommentUserRateThrottle, ScopedRateThrottle]
+    throttle_scope = 'food_anon_detail'
 
 
 # class FoodTypeListCreateView(GenericAPIView):
