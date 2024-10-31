@@ -8,6 +8,7 @@ from .models import FoodType, Food, Comment
 from .permissions import IsAuthorOrReadOnly
 from .serializers import FoodTypeSerializer, FoodSerializer, CommentSerializer
 from rest_framework.filters import SearchFilter, OrderingFilter
+from .pagination import FoodPagination, FoodTypePagination, CommentPagination
 
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from .throttles import (FoodTypeAnonRateThrottle, FoodTypeUserRateThrottle,
@@ -35,18 +36,21 @@ class FoodTypeApiViewSet(ModelViewSet):
     serializer_class = FoodTypeSerializer
     throttle_classes = [FoodTypeAnonRateThrottle, FoodTypeUserRateThrottle, ScopedRateThrottle]
     throttle_scope = 'food_anon_detail'
+    pagination_class = FoodTypePagination
 
 class FoodApiViewSet(ModelViewSet):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
     throttle_classes = [FoodAnonRateThrottle, FoodUserRateThrottle, ScopedRateThrottle]
     throttle_scope = 'food_anon_detail'
+    pagination_class = FoodPagination
 
 class CommentApiViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     throttle_classes = [CommentAnonRateThrottle, CommentUserRateThrottle, ScopedRateThrottle]
     throttle_scope = 'food_anon_detail'
+    pagination_class = CommentPagination
 
 
 # class FoodTypeListCreateView(GenericAPIView):
